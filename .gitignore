@@ -1,8 +1,8 @@
 # .gitignore for ASP.NET Core + general .NET + Node.js frontend
 
 # Build results
-api/bin/
-api/obj/
+/api/obj/
+/api/bin/
 
 # User-specific files
 *.user
