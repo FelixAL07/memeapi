@@ -7,7 +7,9 @@ namespace api.Controllers
     [ApiController]
     [Route("api")]
     public class MemeController : ControllerBase
-    {
+    {   
+        
+
         private static readonly HttpClient httpClient = new();
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
@@ -29,6 +31,7 @@ namespace api.Controllers
                     return StatusCode(500, "Meme data or URL is null after deserialization");
                 }
                 url = meme.Url;
+                Console.WriteLine(url);
 
             }
             catch (Exception)
@@ -43,7 +46,7 @@ namespace api.Controllers
             {
                 return StatusCode(403, "Fetched image not following compliance");
             }
-            return Ok(url);
+            return Content(url);
         }
     }
 }

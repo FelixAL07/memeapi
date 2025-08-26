@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "Oswald";
+    src: url('/fonts/Oswald-Bold.ttf') format('truetype');
+    font-weight: bolder;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Muli";
+    src: url('/fonts/Muli-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+html {
+    font-family: "Muli", sans-serif;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+p, a, span, div, li, button, input, textarea, label, td, th {
+    font-family: "Muli", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Oswald", sans-serif;
+    font-weight: bolder;
+}
+
+:root {
+    --main-yellow: #ffdd00;
+    --main-teal: #008b93;
+    --main-beige: #cdc9af;
+
+    --secondary-orange: #e35205;
+    --secondary-sea-blue: #003f51;
+    --secondary-black: #000000;
+}
+
+body {
+    background-color: var(--main-beige);
+}
