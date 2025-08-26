@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -7,7 +8,8 @@ namespace api.Controllers
     [Route("api")]
     public class MemeController : ControllerBase
     {
-        private static readonly HttpClient httpClient = new HttpClient();
+        private static readonly HttpClient httpClient = new();
+        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
         [HttpGet("meme-of-the-day")]
         public async Task<IActionResult> GetMemeOfTheDay()
@@ -17,14 +19,31 @@ namespace api.Controllers
                 return StatusCode((int)response.StatusCode, "Failed to fetch meme");
 
             var content = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(content);
-            Console.WriteLine(content);
-            doc.RootElement.TryGetProperty("nsfw", out var nsfwElement);
-            if (nsfwElement.GetBoolean())
+            Meme? meme;
+            string url;
+            try
+            {
+                meme = JsonSerializer.Deserialize<Meme>(content, _jsonOptions);
+                if (meme == null || meme.Url == null)
+                {
+                    return StatusCode(500, "Meme data or URL is null after deserialization");
+                }
+                url = meme.Url;
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Failed to deserialize meme data");
+            }
+            if (meme == null)
+            {
+                return StatusCode(500, "Meme data is null after deserialization");
+            }
+            if (meme.Nsfw)
             {
                 return StatusCode(403, "Fetched image not following compliance");
             }
-            return Content(content);
+            return Ok(url);
         }
     }
 }
