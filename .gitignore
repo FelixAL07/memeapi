@@ -1,0 +1,50 @@
+# .gitignore for ASP.NET Core + general .NET + Node.js frontend
+
+# Build results
+api/bin/
+api/obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Visual Studio Code
+.vscode/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Logs
+*.log
+
+# npm & Node.js
+node_modules/
+
+# Environment files
+.env
+.env.*
+
+# Publish output
+publish/
+
+# Others
+*.swp
+*.tmp
+
+# Rider
+.idea/
+
+# Test results
+TestResults/
+
+# Coverage
+coverage/
+
+# Local secrets
+secrets.json
