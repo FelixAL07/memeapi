@@ -1,51 +1,84 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using api.Models;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using CoenM.ImageHash.HashAlgorithms;
+using CoenM.ImageHash;
 
 namespace api.Controllers
 {
     [ApiController]
     [Route("api")]
     public class MemeController : ControllerBase
-    {   
-        
-
+    {
+        private static readonly List<string> urlArr = [];
+        private static readonly Dictionary<ulong, string> hashDict = new(); // store hash → URL
         private static readonly HttpClient httpClient = new();
-        private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
+        private static readonly JsonSerializerOptions options = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
 
         [HttpGet("meme-of-the-day")]
         public async Task<IActionResult> GetMemeOfTheDay()
         {
-            var response = await httpClient.GetAsync("https://meme-api.com/gimme");
-            if (!response.IsSuccessStatusCode)
-                return StatusCode((int)response.StatusCode, "Failed to fetch meme");
+            var hasher = new PerceptualHash(); // You can also test AverageHash or DifferenceHash
+            Meme? meme = null;
+            string url = "";
+            ulong hash = 0;
 
-            var content = await response.Content.ReadAsStringAsync();
-            Meme? meme;
-            string url;
-            try
+            int maxAttempts = 500;
+            int attempts = 0;
+
+            while (attempts < maxAttempts)
             {
-                meme = JsonSerializer.Deserialize<Meme>(content, _jsonOptions);
+                attempts++;
+                var response = await httpClient.GetAsync("https://meme-api.com/gimme");
+                if (!response.IsSuccessStatusCode)
+                    continue;
+                var content = await response.Content.ReadAsStringAsync();
+                meme = JsonSerializer.Deserialize<Meme>(content, options);
+
                 if (meme == null || meme.Url == null)
-                {
-                    return StatusCode(500, "Meme data or URL is null after deserialization");
-                }
-                url = meme.Url;
-                Console.WriteLine(url);
+                    continue;
 
+                url = meme.Url;
+
+                try
+                {
+                    // Download image and compute hash
+                    var imgBytes = await httpClient.GetByteArrayAsync(url);
+                    using var image = Image.Load<Rgba32>(imgBytes);
+                    hash = hasher.Hash(image);
+
+                    // Check against existing hashes
+                    bool isDuplicate = hashDict.Keys.Any(existing =>
+                        CompareHash.Similarity(existing, hash) > 95 // threshold %
+                    );
+
+                    if (!isDuplicate)
+                    {
+                        Console.WriteLine("Hash");
+                        break; // found a unique meme
+                    }
+                }
+                catch
+                {
+                    continue; // if image fails to load, try again
+                }
             }
-            catch (Exception)
-            {
-                return StatusCode(500, "Failed to deserialize meme data");
-            }
-            if (meme == null)
-            {
-                return StatusCode(500, "Meme data is null after deserialization");
-            }
-            if (meme.Nsfw)
-            {
-                return StatusCode(403, "Fetched image not following compliance");
-            }
+
+            if (meme == null || meme.Url == null)
+                return StatusCode(500, "Failed to find a unique meme");
+
+            // Store hash + url
+            hashDict[hash] = url;
+            urlArr.Add(url);
+
+            Console.WriteLine($"Unique meme found after {attempts} attempts");
+            Console.WriteLine($"Hashes stored: {hashDict.Count}");
+
             return Content(url);
         }
     }
