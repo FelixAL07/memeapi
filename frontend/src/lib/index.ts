@@ -6,3 +6,4 @@
 // The @ts-ignore comment is needed because TypeScript doesn't recognize .svelte files by default
 // @ts-ignore
 export { default as Meme } from './components/meme.svelte';
+export { default as FunFact } from './components/funFact.svelte';
