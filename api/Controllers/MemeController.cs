@@ -13,7 +13,7 @@ namespace api.Controllers
     public class MemeController : ControllerBase
     {
         private static readonly List<string> urlArr = [];
-        private static readonly Dictionary<ulong, string> hashDict = new(); // store hash → URL
+        private static readonly Dictionary<ulong, string> hashDict = [];
         private static readonly HttpClient httpClient = new();
         private static readonly JsonSerializerOptions options = new()
         {
@@ -23,7 +23,7 @@ namespace api.Controllers
         [HttpGet("meme-of-the-day")]
         public async Task<IActionResult> GetMemeOfTheDay()
         {
-            var hasher = new PerceptualHash(); // You can also test AverageHash or DifferenceHash
+            var hasher = new PerceptualHash();
             Meme? meme = null;
             string url = "";
             ulong hash = 0;
