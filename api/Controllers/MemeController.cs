@@ -59,7 +59,6 @@ namespace api.Controllers
 
                     if (!isDuplicate)
                     {
-                        Console.WriteLine("Hash");
                         break; // found a unique meme
                     }
                 }

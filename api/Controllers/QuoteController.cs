@@ -24,7 +24,6 @@ namespace api.Controllers
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.api-ninjas.com/v1/quotes");
             request.Headers.Add("X-Api-Key", apiKey);
             var response = await httpClient.SendAsync(request);
-            Console.WriteLine(response);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             return Content(responseContent, "application/json");

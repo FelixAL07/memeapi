@@ -22,11 +22,8 @@
     async function loadFunfact() {
         try {
             const data = await fetchFunFact();
-            console.log(data)
             if (data.url) {
                 funFact = data.url;
-                            console.log(funFact)
-
             } else if (data.error) {
                 throw new Error(data.error);
             } else {

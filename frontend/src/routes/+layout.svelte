@@ -1,6 +1,6 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
-	import '../index.css';
+	import favicon from "$lib/assets/favicon.svg";
+	import "../index.css";
 
 	let { children } = $props();
 	const currentYear = new Date().getFullYear();
@@ -13,10 +13,10 @@
 
 <div class="app-container">
 	<header>
-			<div class="logo">
-				<img src={favicon} alt="Logo"/>
-				<h1>Meme of the Day</h1>
-			</div>
+		<div class="logo">
+			<img src={favicon} alt="Logo" />
+			<h1>Meme of the Day</h1>
+		</div>
 	</header>
 
 	<main>
@@ -72,10 +72,12 @@
 		color: var(--main-white);
 		padding: 1.5rem;
 		text-align: center;
+		width: 100%;
+		overflow-y: hidden;
 	}
 
 	.footer-content {
-		max-width: 1200px;
+		width: 100%;
 		margin: 0 auto;
 	}
 
