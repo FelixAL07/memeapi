@@ -3,7 +3,6 @@
 
     let funFact: string | null = null;
     let error: string | null = null; // Stores any error message that might occur
-    let factUrl: string = ""; // Stores the URL of the meme image
     let isLoading: boolean = true;
 
     export let autoRefresh: boolean = true;
@@ -78,7 +77,7 @@
         text-wrap: wrap;
         font-size: 1.25rem;
         line-height: 1.5;
-        max-width: 100%;
+        width: 100%;
         overflow-wrap: break-word;
         margin: 0;
         text-align: center;
