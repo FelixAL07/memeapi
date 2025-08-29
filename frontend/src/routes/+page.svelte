@@ -1,12 +1,20 @@
 <script lang="ts">
     import { Meme } from "$lib";
-    import FunFact from "$lib/components/funFact.svelte";
+    import {FunFact} from "$lib";
+    import {Quote} from "$lib";
 </script>
 
 <div class="page-wrapper">
     <h1 class="main-title">Meme of the Day</h1>
-    
+
     <div class="container">
+        <section class="card fact-section">
+            <h2>Quote</h2>
+            <div class="card-content">
+                <Quote />
+            </div>
+        </section>
+
         <section class="card meme-section">
             <h2>Today's Meme</h2>
             <div class="card-content">
@@ -19,7 +27,6 @@
             <div class="card-content">
                 <FunFact />
                 <FunFact />
-                <FunFact />
             </div>
         </section>
     </div>
@@ -27,11 +34,10 @@
 
 <style>
     .page-wrapper {
-        max-width: 1200px;
         margin: 0 auto;
         padding: 2rem 1rem;
     }
-    
+
     .main-title {
         text-align: center;
         font-size: 3rem;
@@ -46,8 +52,10 @@
         display: flex;
         gap: 2rem;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-evenly;
         flex-wrap: wrap;
+        justify-items: space-evenly;
+        
     }
 
     .card {
@@ -58,7 +66,9 @@
         flex: 1;
         min-width: 300px;
         max-width: 500px;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
         display: flex;
         flex-direction: column;
     }
@@ -87,12 +97,12 @@
             flex-direction: column;
             align-items: center;
         }
-        
+
         .card {
             width: 100%;
             max-width: 100%;
         }
-        
+
         .main-title {
             font-size: 2.25rem;
         }
