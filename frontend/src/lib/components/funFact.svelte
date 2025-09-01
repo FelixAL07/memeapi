@@ -10,20 +10,25 @@
 
     onMount(() => {
         loadFunfact();
-        if (autoRefresh) {
-            const intervalId = setInterval(loadFunfact, refreshInterval);
 
-            // Clean up interval on component destruction
-            return () => {
-                clearInterval(intervalId);
-            };
+        let intervalId: ReturnType<typeof setInterval> | null = null;
+
+        if (autoRefresh) {
+            intervalId = setInterval(loadFunfact, refreshInterval);
         }
+
+        return () => {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+        };
     });
+
     async function loadFunfact() {
         try {
             const data = await fetchFunFact();
-            if (data.url) {
-                funFact = data.url;
+            if (data.text) {
+                funFact = data.text;
             } else if (data.error) {
                 throw new Error(data.error);
             } else {

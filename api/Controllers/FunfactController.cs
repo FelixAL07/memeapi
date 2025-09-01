@@ -19,6 +19,7 @@ namespace api.Controllers
 
             var content = await response.Content.ReadAsStringAsync();
             var funFact = JsonSerializer.Deserialize<Funfact>(content);
+
             if (funFact != null && !string.IsNullOrEmpty(funFact.Text))
             {
                 return Ok(funFact);
