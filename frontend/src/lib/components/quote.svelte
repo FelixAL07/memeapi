@@ -107,18 +107,17 @@
 
     .quote-wrap {
         position: relative;
-        position: relative;
         border-left: 3px solid transparent;
         border-bottom: 3px solid transparent;
         border-image: linear-gradient(
             to bottom right,
             rgb(255, 255, 255, 0.1),
-             var(--main-yellow),
+            var(--main-yellow),
             var(--main-teal),
             rgb(255, 255, 255, 0.1)
         );
         border-image-slice: 1;
-        margin: 5px, 5px, 5px, 0;
+        margin: 5px;
     }
 
     @media (max-width: 768px) {

@@ -36,6 +36,9 @@
     .page-wrapper {
         margin: 0 auto;
         padding: 2rem 1rem;
+        max-height: 100vh;
+        max-width: 100vw;
+        overflow: hidden;
     }
 
     .main-title {
@@ -64,8 +67,8 @@
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         flex: 1;
-        min-width: 300px;
-        max-width: 500px;
+        min-width: 20vw;
+        max-width: 22vw;
         transition:
             transform 0.3s ease,
             box-shadow 0.3s ease;

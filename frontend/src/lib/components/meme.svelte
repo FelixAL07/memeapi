@@ -72,10 +72,6 @@
 {:else if memeUrl}
     <div class="meme-container">
         <img src={memeUrl} alt="Meme of the day" />
-        <button on:click={loadMeme} class="refresh-button">
-            <span class="refresh-icon">↻</span>
-            <span class="refresh-text">New Meme</span>
-        </button>
     </div>
 {:else}
     <p class="no-meme">No meme available</p>
@@ -148,7 +144,7 @@
     }
 
     /* Button styles */
-    .retry-button, .refresh-button {
+    .retry-button {
         background-color: var(--main-teal);
         color: var(--main-white);
         border: none;
@@ -162,14 +158,9 @@
         gap: 0.5rem;
     }
     
-    .retry-button:hover, .refresh-button:hover {
+    .retry-button:hover {
         background-color: var(--secondary-sea-blue);
         transform: translateY(-2px);
-    }
-    
-    .refresh-icon {
-        font-size: 1.2rem;
-        font-weight: bold;
     }
     
     .no-meme {
