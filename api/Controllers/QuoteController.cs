@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using dotenv.net;
+using System.Text.Json;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -25,8 +27,14 @@ namespace api.Controllers
             request.Headers.Add("X-Api-Key", apiKey);
             var response = await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-
-            return Content(responseContent, "application/json");
+            
+            var quotes = JsonSerializer.Deserialize<Quote[]>(responseContent);
+            if (quotes != null && quotes.Length > 0)
+            {
+                return Ok(quotes[0]);
+            }
+            
+            return StatusCode(500, "Failed to parse quote response");
         }
     }
 }

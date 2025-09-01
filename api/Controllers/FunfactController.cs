@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using api.Models;
 
 namespace api.Controllers
 {
@@ -17,12 +18,12 @@ namespace api.Controllers
                 return StatusCode((int)response.StatusCode, "Failed to fetch fun fact");
 
             var content = await response.Content.ReadAsStringAsync();
-            using var doc = JsonDocument.Parse(content);
-            if (doc.RootElement.TryGetProperty("text", out var textElement))
+            var funFact = JsonSerializer.Deserialize<Funfact>(content);
+            if (funFact != null && !string.IsNullOrEmpty(funFact.Text))
             {
-                return Content(textElement.GetString() ?? "");
+                return Ok(funFact);
             }
-            return StatusCode(500, "No 'text' property found in response");
+            return StatusCode(500, "Failed to parse fun fact response");
         }
     }
 }
