@@ -25,13 +25,14 @@ namespace api.Controllers
 
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.api-ninjas.com/v1/quotes");
             request.Headers.Add("X-Api-Key", apiKey);
+
             var response = await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
-            
-            var quotes = JsonSerializer.Deserialize<Quote[]>(responseContent);
+
+            var quotes = JsonSerializer.Deserialize<QuoteModel[]>(responseContent);
             if (quotes != null && quotes.Length > 0)
             {
-                return Ok(quotes[0]);
+                return Ok(quotes);
             }
             
             return StatusCode(500, "Failed to parse quote response");

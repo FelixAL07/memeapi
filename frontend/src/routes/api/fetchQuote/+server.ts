@@ -14,9 +14,9 @@ export async function GET() {
         // The backend returns an array of quotes from the API Ninjas service
         const quoteData = await response.json();
         
-        if (Array.isArray(quoteData) && quoteData.length > 0) {
-            const { quote, author, category } = quoteData[0];
-            return new Response(JSON.stringify({ quote, author, category }), {
+        if (quoteData != null) {
+            
+            return new Response(JSON.stringify(quoteData[0]), {
                 headers: { 'Content-Type': 'application/json' }
             });
         } else {

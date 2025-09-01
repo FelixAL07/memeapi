@@ -24,10 +24,9 @@
     async function loadQuote() {
         try {
             const data = await fetchQuote();
-            console.log(data);
+
             if (data.quote) {
                 quote = data.quote;
-                console.log(quote);
             } else if (data.error) {
                 throw new Error(data.error);
             } else {
@@ -36,7 +35,6 @@
 
             if (data.author) {
                 author = data.author;
-                console.log(author);
             } else if (data.error) {
                 throw new Error(data.error);
             } else {
@@ -61,10 +59,12 @@
     }
 </script>
 
-<div class="funfact-container">
+<div class="quote-container">
     {#if quote}
         <div>
-            <p class="quote">"{quote}"</p>
+            <div class="quote-wrap">
+                <p class="quote">"{quote}"</p>
+            </div>
             {#if author}
                 <p class="author">- {author}</p>
             {/if}
@@ -80,7 +80,7 @@
 </div>
 
 <style>
-    .funfact-container {
+    .quote-container {
         width: 100%;
         display: flex;
         justify-content: center;
@@ -100,8 +100,25 @@
         text-align: center;
         padding: 1rem;
         background-color: rgba(204, 201, 175, 0.2);
-        border-radius: 0.5rem;
-        border-left: 4px solid var(--main-yellow);
+        z-index: 1;
+        border-top-right-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+    }
+
+    .quote-wrap {
+        position: relative;
+        position: relative;
+        border-left: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-image: linear-gradient(
+            to bottom right,
+            rgb(255, 255, 255, 0.1),
+             var(--main-yellow),
+            var(--main-teal),
+            rgb(255, 255, 255, 0.1)
+        );
+        border-image-slice: 1;
+        margin: 5px, 5px, 5px, 0;
     }
 
     @media (max-width: 768px) {
