@@ -1,7 +1,8 @@
 <script lang="ts">
     import { Meme } from "$lib";
-    import {FunFact} from "$lib";
-    import {Quote} from "$lib";
+    import { FunFact } from "$lib";
+    import { Quote } from "$lib";
+    import { Wyr } from "$lib";
 </script>
 
 <div class="page-wrapper">
@@ -27,6 +28,14 @@
             <div class="card-content">
                 <FunFact />
                 <FunFact />
+            </div>
+        </section>
+
+        <section class="card fact-section">
+            <h2>Would You Rather</h2>
+            <div class="card-content">
+                <Wyr />
+
             </div>
         </section>
     </div>
@@ -58,7 +67,6 @@
         justify-content: space-evenly;
         flex-wrap: wrap;
         justify-items: space-evenly;
-        
     }
 
     .card {
@@ -92,6 +100,7 @@
         align-items: center;
         justify-content: center;
         flex-grow: 1;
+        gap: 1rem;
     }
 
     /* Responsive adjustments */

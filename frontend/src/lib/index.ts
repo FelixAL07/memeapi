@@ -8,3 +8,4 @@
 export { default as Meme } from './components/meme.svelte';
 export { default as FunFact } from './components/funFact.svelte';
 export { default as Quote } from "./components/quote.svelte";
+export { default as Wyr } from "./components/wyr.svelte";

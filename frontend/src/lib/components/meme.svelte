@@ -97,10 +97,6 @@
         border: 3px solid var(--main-yellow);
         transition: transform 0.2s ease;
     }
-    
-    img:hover {
-        transform: scale(1.02);
-    }
 
     /* Loading styles */
     .loading-container {

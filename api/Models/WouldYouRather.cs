@@ -10,9 +10,5 @@ namespace api.Models
         // Cache control - ignored in serialization
         [JsonIgnore]
         public DateTime FetchDate { get; set; }
-        
-        // Don't need this property anymore as we're using FetchDate
-        [JsonIgnore]
-        public DateTime? ValidDate { get; set; }
     }
 }
