@@ -36,14 +36,6 @@
 <div class="page-wrapper view-{currentView}">
     <div class="header">
         <h1 class="main-title">Meme of the Day</h1>
-        <div class="controls">
-            <button class="view-button" on:click={() => currentView = 'all'} 
-                   class:active={currentView === 'all'}>All Content</button>
-            <button class="view-button" on:click={() => currentView = 'meme'} 
-                   class:active={currentView === 'meme'}>Meme Only</button>
-            <button class="view-button" on:click={() => currentView = 'facts'} 
-                   class:active={currentView === 'facts'}>Facts Only</button>
-        </div>
     </div>
     
     <Clock />
@@ -67,7 +59,6 @@
             <h2><span class="icon">💡</span> Fun Fact</h2>
             <div class="card-content">
                 <FunFact refreshInterval={30000} />
-                <FunFact refreshInterval={45000} />
             </div>
         </section>
 
@@ -82,11 +73,11 @@
 
 <style>
     .page-wrapper {
+        z-index: 1;
         margin: 0 auto;
         padding: 2rem 1rem;
         max-height: 100vh;
         max-width: 100vw;
-        overflow: hidden;
         transition: background-color 0.5s ease;
     }
 
@@ -121,7 +112,6 @@
         background-color: var(--main-white);
         border-radius: 1rem;
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
         flex: 1;
         min-width: 20vw;
         max-width: 22vw;

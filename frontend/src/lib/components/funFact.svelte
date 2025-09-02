@@ -62,7 +62,7 @@
     {#if funFact}
         <p
             class="funfact"
-            style="font-size: {charArray.length ? `calc(22vw / ${(charArray.length/3.5).toFixed(2)})` : '1.5rem'}"
+            style="font-size: {charArray.length ? `calc(22vw / ${(charArray.length/5).toFixed(2)})` : '1.5rem'}"
         >
             {funFact}
         </p>
