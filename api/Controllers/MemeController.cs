@@ -12,6 +12,7 @@ namespace api.Controllers
     [Route("api")]
     public class MemeController : ControllerBase
     {
+        private static readonly int MaxMemesInDictionary = 25; // Maximum number of memes to store
         private static readonly List<string> urlArr = [];
         private static readonly Dictionary<ulong, string> hashDict = [];
         private static readonly HttpClient httpClient = new();
@@ -71,12 +72,24 @@ namespace api.Controllers
             if (meme == null || meme.Url == null)
                 return StatusCode(500, "Failed to find a unique meme");
 
+            // Check if we've reached the maximum limit
+            if (hashDict.Count >= MaxMemesInDictionary && urlArr.Count > 0)
+            {
+                // Remove the oldest meme from the dictionary
+                string oldestUrl = urlArr[0];
+                ulong oldestHash = hashDict.FirstOrDefault(x => x.Value == oldestUrl).Key;
+                hashDict.Remove(oldestHash);
+                urlArr.RemoveAt(0);
+                
+                Console.WriteLine($"Removed oldest meme to stay within limit of {MaxMemesInDictionary}");
+            }
+
             // Store hash + url
             hashDict[hash] = url;
             urlArr.Add(url);
 
             Console.WriteLine($"Unique meme found after {attempts} attempts");
-            Console.WriteLine($"Hashes stored: {hashDict.Count}");
+            Console.WriteLine($"Hashes stored: {hashDict.Count}/{MaxMemesInDictionary}");
 
             return Content(url);
         }

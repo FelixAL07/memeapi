@@ -3,7 +3,7 @@
 
     // Props that can be passed to this component
     export let autoRefresh: boolean = true;
-    export let refreshInterval: number = 360000; // 1 hour in milliseconds
+    export let refreshInterval: number = 360000*12; // 1 hour in milliseconds times 12 for a day
 
     let memeUrl: string = ""; // Stores the URL of the meme image
     let isLoading: boolean = true; // Tracks loading state of the meme

@@ -5,6 +5,8 @@
     let error: string | null = null; // Stores any error message that might occur
     let isLoading: boolean = true;
 
+    let charArray: Array<any> = [];
+
     export let autoRefresh: boolean = true;
     export let refreshInterval: number = 360000;
 
@@ -27,8 +29,11 @@
     async function loadFunfact() {
         try {
             const data = await fetchFunFact();
+
             if (data.text) {
                 funFact = data.text;
+                charArray = funFact ? [...funFact] : [];
+
             } else if (data.error) {
                 throw new Error(data.error);
             } else {
@@ -55,12 +60,19 @@
 
 <div class="funfact-container">
     {#if funFact}
-        <p class="funfact">{funFact}</p>
+        <p
+            class="funfact"
+            style="font-size: {charArray.length ? `calc(22vw / ${(charArray.length/3.5).toFixed(2)})` : '1.5rem'}"
+        >
+            {funFact}
+        </p>
     {:else if isLoading}
         <div class="loading-container">
             <p class="loading-text">Loading Fun Fact...</p>
             <div class="loading-spinner"></div>
         </div>
+    {:else if error}
+        <p class="error-message">Error: {error}</p>
     {/if}
 </div>
 
@@ -69,15 +81,13 @@
         width: 100%;
         display: flex;
         justify-content: center;
-        align-items: center;
-        min-height: 150px;
+        font-family: "Muli", sans-serif;
     }
 
     .funfact {
         font-family: "Muli", sans-serif;
         color: var(--secondary-sea-blue);
         text-wrap: wrap;
-        font-size: 1.25rem;
         line-height: 1.5;
         width: 100%;
         overflow-wrap: break-word;
@@ -121,5 +131,16 @@
         to {
             transform: rotate(360deg);
         }
+    }
+    
+    .error-message {
+        color: #e74c3c;
+        text-align: center;
+        padding: 1rem;
+        background-color: rgba(231, 76, 60, 0.1);
+        border-radius: 0.5rem;
+        border-left: 4px solid #e74c3c;
+        width: 100%;
+        margin: 0;
     }
 </style>
