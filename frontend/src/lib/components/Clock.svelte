@@ -9,7 +9,7 @@
         intervalId = setInterval(() => {
             time = new Date();
             dateFormatted = formatDate(time);
-        }, 1000);
+        }, 100);
     });
 
     onDestroy(() => {
