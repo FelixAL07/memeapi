@@ -13,5 +13,8 @@ export default defineConfig({
 				resolve(__dirname, 'static')
 			]
 		}
+	},
+	build: {
+		outDir: 'build'
 	}
 });
