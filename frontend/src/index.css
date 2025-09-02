@@ -57,7 +57,7 @@ h6 {
 
 body {
     /*background-color: var(--main-beige);*/
-    background-image: url("../static/Beige_enkel.png");
+    background-image: url("/Beige_enkel.png");
     background-repeat: no-repeat;
     background-size: cover;
     margin: 0;
