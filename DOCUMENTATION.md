@@ -47,7 +47,8 @@ frontend/
 │   │   │   ├── funFact.svelte  # Fun fact component
 │   │   │   ├── meme.svelte     # Meme component
 │   │   │   ├── quote.svelte    # Quote component
-│   │   │   └── wyr.svelte      # "Would you rather" component
+│   │   │   ├── wyr.svelte      # "Would you rather" component
+│   │   │   └── Clock.svelte      # "Clock" component
 │   │   ├── assets/             # Static assets
 │   │   └── index.ts            # Entry point for lib exports
 │   ├── routes/                 # Application routes (pages)
@@ -87,21 +88,10 @@ The application follows a typical client-server communication pattern:
 3. **Cross-Origin Resource Sharing (CORS)**:
    - The backend is configured with CORS to allow requests from the frontend origin (`http://localhost:5173`)
    - This ensures secure communication between the separate frontend and backend servers
+   - Only configured to serve `GET` requests
 
-### 2.2 Data Flow Diagram
-
-```
-┌─────────────┐     HTTP Request     ┌─────────────────┐     HTTP Request     ┌─────────────┐
-│  Frontend   │ ────────────────────►│ SvelteKit       │ ────────────────────►│   Backend   │
-│ (Browser)   │                      │ Server Routes   │                      │ (.NET API)  │
-└─────────────┘     HTTP Response    └─────────────────┘     HTTP Response    └─────────────┘
-      ▲                                                                              │
-      │                                                                              │
-      │                                                                              ▼
-      │                                                                      ┌─────────────┐
-      └──────────────────────────────────────────────────────────────────────┤ External APIs│
-                                     Data Flow                                └─────────────┘
-```
+### 2.2 Flowchart
+Go to this link: https://excalidraw.com/#json=OMuj5kLn42R2MJPjPPa4_,zZyiQIa28SgMAdqJzLVIwg to see a flowchart of the application 
 
 ## 3. External APIs Used
 
@@ -175,8 +165,9 @@ The Meme of the Day implementation uses a sophisticated approach to ensure uniqu
 ### 5.1 Content Deduplication
 
 - The meme service uses perceptual image hashing to detect and prevent duplicate memes
-- This ensures users always see fresh content even across application restarts
+- This ensures users always see fresh content
 - The implementation can identify similar images even if they have slight variations
+- It works in the application layer so it is not persisted
 
 ### 5.2 Environment Configuration
 
@@ -184,31 +175,16 @@ The Meme of the Day implementation uses a sophisticated approach to ensure uniqu
 - This keeps sensitive API keys out of source control
 - Supports different configurations for development and production environments
 
-### 5.3 Error Handling and Resilience
-
-- Comprehensive error handling in both frontend and backend
-- Frontend components display loading states during data fetching
-- Error messages are properly captured and displayed to users
-- Backend includes retry logic for external API failures
-
-### 5.4 Component Architecture
+### 5.3 Component Architecture
 
 - The frontend uses a modular component approach
 - Each content type has its own dedicated component
 - Components can be reused and configured with props
 - This architecture supports easy addition of new content types
 
-### 5.5 Performance Optimizations
+### 5.4 Caching
 
 - Content caching for the "Would You Rather" feature reduces API calls
-- Image processing only occurs when necessary
-- The backend is configured for efficient cross-origin resource sharing
-
-### 5.6 Design and UI
-
-- Custom fonts (Muli and Oswald) for improved typography
-- Responsive layout that works on different screen sizes
-- Clean card-based design separates different content types
 
 ## 6. Getting Started
 
