@@ -18,7 +18,7 @@ COPY . /source
 
 WORKDIR /source
 
-# This is the architecture you’re building for, which is passed in by the builder.
+# This is the architecture you're building for, which is passed in by the builder.
 # Placing it here allows the previous steps to be cached across architectures.
 ARG TARGETARCH
 
@@ -26,7 +26,8 @@ ARG TARGETARCH
 # Leverage a cache mount to /root/.nuget/packages so that subsequent builds don't have to re-download packages.
 # If TARGETARCH is "amd64", replace it with "x64" - "x64" is .NET's canonical name for this and "amd64" doesn't
 #   work in .NET 6.0.
-RUN dotnet publish -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
+RUN --mount=type=cache,id=nuget,target=/root/.nuget/packages \
+    dotnet publish -a ${TARGETARCH/amd64/x64} --use-current-runtime --self-contained false -o /app
 
 # If you need to enable globalization and time zones:
 # https://github.com/dotnet/dotnet-docker/blob/main/samples/enable-globalization.md
@@ -47,6 +48,13 @@ WORKDIR /app
 # Copy everything needed to run the app from the "build" stage.
 COPY --from=build /app .
 
+ENV PORT=8080
+ENV ASPNETCORE_URLS="http://0.0.0.0:${PORT}"
+
+# Expose the HTTP port - uses the PORT env variable
+EXPOSE ${PORT}
+# Expose the HTTP port
+EXPOSE 8082
 # Switch to a non-privileged user (defined in the base image) that the app will run under.
 # See https://docs.docker.com/go/dockerfile-user-best-practices/
 # and https://github.com/dotnet/dotnet-docker/discussions/4764

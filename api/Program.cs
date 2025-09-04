@@ -1,6 +1,5 @@
 using Scalar.AspNetCore;
 
-
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
@@ -15,24 +14,25 @@ builder.Services.AddCors(options =>
         {
             policy.AllowAnyOrigin()
                   .AllowAnyHeader()
-                  .WithMethods("Get");
+                  .WithMethods("GET");
         });
-
-
 });
 
-var app = builder.Build();
-app.MapControllers();
-
-if (app.Environment.IsDevelopment())
-
-
+// Configure Kestrel to use HTTP in production
+if (builder.Environment.IsProduction())
 {
-    app.MapOpenApi();
-    app.MapScalarApiReference();
+    builder.WebHost.ConfigureKestrel(serverOptions =>
+    {
+        // Listen on port 8080 (or your preferred port) for HTTP
+        serverOptions.ListenAnyIP(8081);
+    });
 }
 
-app.UseHttpsRedirection();
+var app = builder.Build();
+
 app.UseCors("MyCorsPolicy");
+app.MapControllers();
+app.MapOpenApi();
+app.MapScalarApiReference();
 
 app.Run();
