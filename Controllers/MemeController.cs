@@ -13,9 +13,11 @@ namespace api.Controllers
     public class MemeController : ControllerBase
     {
         private static readonly int MaxMemesInDictionary = 25; // Maximum number of memes to store
-        private static readonly List<string> urlArr = [];
-        private static readonly Dictionary<ulong, string> hashDict = [];
+        private static readonly Dictionary<ulong, string> hashDict = new();
+        private static readonly Queue<ulong> hashQueue = new(); // tracks oldest hashes
         private static readonly HttpClient httpClient = new();
+        private static readonly object _lock = new(); // ensure thread safety
+
         private static readonly JsonSerializerOptions options = new()
         {
             PropertyNameCaseInsensitive = true
@@ -38,6 +40,7 @@ namespace api.Controllers
                 var response = await httpClient.GetAsync("https://meme-api.com/gimme");
                 if (!response.IsSuccessStatusCode)
                     continue;
+
                 var content = await response.Content.ReadAsStringAsync();
                 meme = JsonSerializer.Deserialize<Meme>(content, options);
 
@@ -72,21 +75,22 @@ namespace api.Controllers
             if (meme == null || meme.Url == null)
                 return StatusCode(500, "Failed to find a unique meme");
 
-            // Check if we've reached the maximum limit
-            if (hashDict.Count >= MaxMemesInDictionary && urlArr.Count > 0)
+            // Thread-safe block
+            lock (_lock)
             {
-                // Remove the oldest meme from the dictionary
-                string oldestUrl = urlArr[0];
-                ulong oldestHash = hashDict.FirstOrDefault(x => x.Value == oldestUrl).Key;
-                hashDict.Remove(oldestHash);
-                urlArr.RemoveAt(0);
-                
-                Console.WriteLine($"Removed oldest meme to stay within limit of {MaxMemesInDictionary}");
-            }
+                if (hashDict.Count >= MaxMemesInDictionary)
+                {
+                    // Remove oldest meme
+                    var oldestHash = hashQueue.Dequeue();
+                    hashDict.Remove(oldestHash);
 
-            // Store hash + url
-            hashDict[hash] = url;
-            urlArr.Add(url);
+                    Console.WriteLine($"Removed oldest meme to stay within limit of {MaxMemesInDictionary}");
+                }
+
+                // Store new meme
+                hashDict[hash] = url;
+                hashQueue.Enqueue(hash);
+            }
 
             Console.WriteLine($"Unique meme found after {attempts} attempts");
             Console.WriteLine($"Hashes stored: {hashDict.Count}/{MaxMemesInDictionary}");
