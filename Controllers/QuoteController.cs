@@ -9,7 +9,12 @@ namespace api.Controllers
     [Route("api")]
     public class QuoteController : ControllerBase
     {
-        private static readonly HttpClient httpClient = new();
+        private static readonly HttpClient httpClient = new(
+            new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            }
+        );
 
 
         [HttpGet("quote")]
@@ -21,6 +26,8 @@ namespace api.Controllers
 
             var response = await httpClient.SendAsync(request);
             var responseContent = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine(responseContent);
 
             var quotes = JsonSerializer.Deserialize<QuoteModel[]>(responseContent);
             if (quotes != null && quotes.Length > 0)
